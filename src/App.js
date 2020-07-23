@@ -1,26 +1,67 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import ToDoList from "./ToDoList";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [listVal, setListVal] = useState("");
+  const [list, setlist] = useState([]);
+
+  const inputVal = (event) => {
+    // console.log(event.target.value);
+    setListVal(event.target.value);
+  };
+
+  const addVal = () => {
+    setlist((prev) => {
+      return [...prev, listVal];
+    });
+    setListVal("");
+  };
+
+  const deleteListItem = (id) => {
+    console.log("It is deleted ", id);
+    setlist((old) => {
+      return old.filter((elem, index) => {
+        return index !== id;
+      });
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="main_div">
+      <div className="center_div">
+        <br />
+        <h1>ToDo App</h1>
+        <div className="fix">
+          <input
+            type="text"
+            placeholder="Add an item"
+            name="listVal"
+            onChange={inputVal}
+            value={listVal}
+          />
+          <Button onClick={addVal}>
+            <AddCircleIcon />
+          </Button>
+        </div>
+
+        <ul>
+          {list.map((elem, index) => {
+            return (
+              <ToDoList
+                key={index}
+                id={index}
+                list={elem}
+                onSelect={deleteListItem}
+              />
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
